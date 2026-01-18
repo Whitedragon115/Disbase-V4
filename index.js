@@ -2,6 +2,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { color } = require('console-log-colors')
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 const logger = require('./function/log');
 const { cloudreveInit } = require('./function/cloudreve');
 const { UploadStorageSystem } = require('./config.json')
@@ -39,6 +40,22 @@ async function configCheck() {
 
 async function init() {
 
+	// Generate Prisma Client
+	try {
+		logger.box('Prisma Client Generation');
+		logger.info('Generating Prisma Client...');
+		execSync('npx prisma generate', { 
+			stdio: 'inherit',
+			cwd: __dirname 
+		});
+		logger.success('Prisma Client generated successfully.');
+	} catch (error) {
+		logger.error('Failed to generate Prisma Client:');
+		console.error(error);
+		process.exit(1);
+	}
+
+
 	const checkArr = [
 		await configCheck(),
 		(await cloudreveInit()).code
@@ -50,6 +67,8 @@ async function init() {
 			process.exit(1);
 		}
 	}
+
+	
 
 	logger.line()
 
