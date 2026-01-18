@@ -58,7 +58,7 @@ module.exports = {
         for (let i = 0; i < concurrency; i++) workers.push(processAttachment());
         const workerResults = (await Promise.all(workers)).flat();
 
-        const directLinks = await getDirectLink(workerResults.map(res => res.data.uri))
+        const links = await getDirectLink(workerResults.map(res => res.data.uri))
 
         await message.react('✅');
         await sleep(1500);
@@ -89,19 +89,19 @@ module.exports = {
         for (const res of workerResults) {
             switch (res.fileType) {
                 case 'image':
-                    await fileSender(res, directLinks[i], imageSenderChannel);
+                    await fileSender(res, links[i], imageSenderChannel);
                     break;
                 case 'video':
-                    await fileSender(res, directLinks[i], videoSenderChannel);
+                    await fileSender(res, links[i], videoSenderChannel);
                     break;
                 case 'other':
-                    await fileSender(res, directLinks[i], otherSenderChannel);
+                    await fileSender(res, links[i], otherSenderChannel);
                     break;
                 default:
                     logger.warn(`Unknown file type: ${res.fileType} for file ${res.attachment.name}`);
 
             }
-            
+
             i++;
         }
     }
