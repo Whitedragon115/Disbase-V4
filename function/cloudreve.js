@@ -103,7 +103,7 @@ async function init() {
     if (!readConfig('CloudrevePolicyId')) {
         logger.warn('CloudrevePolicyId is not set in config.json, below is the list of available policy IDs:')
         policyList.data.data.forEach(dt => {
-            logger.info(`Policy Name: ${dt.name} | Policy ID: ${dt.id} | Policy Type: ${dt.type} | Max Size: ${dt.max_size}`);
+            logger.info(`Policy Name: ${dt.name} | Policy ID: ${dt.id} | Policy Type: ${dt.type} | Max Size: ${dt.max_size == 0 ? 'Unlimited' : dt.max_size}`);
         })
         return { code: false }
     }

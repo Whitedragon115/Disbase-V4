@@ -41,7 +41,7 @@ async function init() {
 
 	const checkArr = [
 		await configCheck(),
-		await cloudreveInit()
+		(await cloudreveInit()).code
 	]
 
 	for (const check of checkArr) {
