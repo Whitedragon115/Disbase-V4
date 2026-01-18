@@ -5,9 +5,7 @@ const logger = require('../function/log.js');
 
 const { CloudreveApiUrl, CloudreveUploadUri, CloudrevePolicyId, UploadStorageSystem } = require('../config.json');
 const { readConfig } = require('./json');
-const { unixTimeStamp } = require('./time.js');
-const { newImage } = require('./prisma.js');
-const { uuid } = require('./tool.js');
+const { sleep } = require('./time.js');
 require('dotenv').config();
 
 const cloudreveUser = process.env.CLOUDREVE_USER;
@@ -25,6 +23,18 @@ async function refresh() {
     refreshToken = response.data.token.refresh_token;
 }
 
+async function checkAccessable(deepth = 0) {
+    if (deepth > 3) return { success: false, error: 'Max retry reached' };
+    const response = await axios.get(`${CloudreveApiUrl}/file?uri=${CloudreveUploadUri}&page=0&page_size=1`, token())
+    if(response.data.code == 401){
+        await refresh();
+        await sleep(1000);
+        return await checkAccessable(deepth + 1);
+    }
+
+    return { success: true };
+}
+
 function token(data) {
     return {
         headers: {
@@ -35,6 +45,7 @@ function token(data) {
 }
 
 async function upload(filepath, att, uuidStr) {
+    if(!(await checkAccessable()).success) return { success: false, error: 'Access check failed' };
 
     const uri = `${CloudreveUploadUri}${uuidStr}${path.extname(att.name)}`;
     const fileSize = fs.statSync(filepath).size;
@@ -59,6 +70,8 @@ async function upload(filepath, att, uuidStr) {
 }
 
 async function getDirectLink(uriArr) {
+    if(!(await checkAccessable()).success) return { success: false, error: 'Access check failed' };
+    
     const createDirectLink = await axios.put(`${CloudreveApiUrl}/file/source`, {
         uris: uriArr
     }, token()).catch(err => logger.error(`Cloudreve create direct link failed: ${err}`));
@@ -90,6 +103,12 @@ async function init() {
 
     accessToken = getToken.data.data.token.access_token;
     refreshToken = getToken.data.data.token.refresh_token;
+
+    await checkAccessable().then((r) => {
+        if(r.success) return;
+        logger.error('Cloudreve authentication failed with provided credentials.');
+        return { code: false }
+    });
 
     logger.success('Cloudreve authentication successful.');
 
