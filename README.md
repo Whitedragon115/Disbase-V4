@@ -2,6 +2,8 @@
 
 Disbase is a Discord bot that uses Discord server features to make your life easier.
 
+English | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md)
+
 ---
 
 # Features
@@ -68,7 +70,8 @@ The output channel will include the following information:
 * File thumbnail
 
 In Discord, it will look like this:
-![](https://cloud.dragoncode.dev/f/8v6UY/NHp0-qqW7CbACFKnU-IeN8.png)
+
+![demo image](https://cloud.dragoncode.dev/f/8v6UY/NHp0-qqW7CbACFKnU-IeN8.png)
 
 ---
 
