@@ -15,7 +15,7 @@ let accessToken = "";
 let refreshToken = "";
 
 async function refresh() {
-    const response = await axios.post(`${CloudreveApiUrl}/session/refresh`, {
+    const response = await axios.post(`${CloudreveApiUrl}/session/token/refresh`, {
         refresh_token: refreshToken
     })
 
