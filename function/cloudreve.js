@@ -19,8 +19,8 @@ async function refresh() {
         refresh_token: refreshToken
     })
 
-    accessToken = response.data.token.access_token;
-    refreshToken = response.data.token.refresh_token;
+    accessToken = response.data.data.access_token;
+    refreshToken = response.data.data.refresh_token;
 }
 
 async function checkAccessable(deepth = 0) {
