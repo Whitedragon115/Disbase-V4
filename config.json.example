@@ -1,0 +1,17 @@
+{
+    "UploadChannelId": "",
+    "ImageOutputChannelId": "",
+    "VideoOutputChannelId": "",
+    "OtherOutputChannelId": "",
+
+    "StatisticsChannelId": "",
+    "UploadLogginChannelId": "",
+
+    "UploadConnurrency": 3,
+
+    "UploadStorageSystem": "cloudreve",
+
+    "CloudreveApiUrl": "https://cloudreve domain/api/v4",
+    "CloudrevePolicyId": "empty here in first run",
+    "CloudreveUploadUri": "cloudreve://my/Disbase/"
+}

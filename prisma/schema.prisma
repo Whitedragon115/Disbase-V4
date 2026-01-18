@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Files {
+  id   Int      @id @default(autoincrement())
+  uuid String   @unique
+  time DateTime @default(now())
+  size BigInt
+  name String
+}
