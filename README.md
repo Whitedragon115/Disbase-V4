@@ -68,7 +68,8 @@ The output channel will include the following information:
 * File thumbnail
 
 In Discord, it will look like this:
-![](https://cloud.dragoncode.dev/f/8v6UY/NHp0-qqW7CbACFKnU-IeN8.png)
+
+![demo image](https://cloud.dragoncode.dev/f/8v6UY/NHp0-qqW7CbACFKnU-IeN8.png)
 
 ---
 
