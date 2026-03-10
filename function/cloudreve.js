@@ -22,6 +22,14 @@ async function refresh() {
 
     accessToken = response.data.data.access_token;
     refreshToken = response.data.data.refresh_token;
+
+    return {
+        success: true,
+        data: {
+            access_token: accessToken,
+            refresh_token: refreshToken
+        }
+    }
 }
 
 async function checkAccessable(deepth = 0) {
@@ -104,8 +112,9 @@ async function init() {
 
     if(process.env.CLOUDREVE_2FA_ENABLE === 'true'){
         const sessionId = getToken.data.data;
+        logger.debug('Please enter your Cloudreve 2FA token below:');
         const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-        const optCode = await new Promise(resolve => rl.question('Enter 2FA token: ', ans => { rl.close(); resolve(ans.trim()); }));
+        const optCode = await new Promise(resolve => rl.question('', ans => { rl.close(); resolve(ans.trim()); }));
         
         getToken = await axios.post(`${CloudreveApiUrl}/session/token/2fa`, {
             otp: String(optCode),
