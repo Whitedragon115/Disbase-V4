@@ -99,7 +99,6 @@ module.exports = {
                     break;
                 default:
                     logger.warn(`Unknown file type: ${res.fileType} for file ${res.attachment.name}`);
-
             }
 
             i++;

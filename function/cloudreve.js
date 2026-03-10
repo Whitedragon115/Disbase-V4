@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const readline = require('readline');
 const logger = require('../function/log.js');
 
 const { CloudreveApiUrl, CloudreveUploadUri, CloudrevePolicyId, UploadStorageSystem } = require('../config.json');
@@ -96,11 +97,22 @@ async function init() {
     logger.success('Cloudreve API is reachable.');
 
     // Authenticate and Retrieve Tokens
-    const getToken = await axios.post(`${CloudreveApiUrl}/session/token`, {
+    let getToken = await axios.post(`${CloudreveApiUrl}/session/token`, {
         email: cloudreveUser,
         password: cloudrevePass
     }).catch(() => logger.error('Cloudreve authentication failed'));
 
+    if(process.env.CLOUDREVE_2FA_ENABLE === 'true'){
+        const sessionId = getToken.data.data;
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        const optCode = await new Promise(resolve => rl.question('Enter 2FA token: ', ans => { rl.close(); resolve(ans.trim()); }));
+        
+        getToken = await axios.post(`${CloudreveApiUrl}/session/token/2fa`, {
+            otp: String(optCode),
+            session_id: sessionId
+        }).catch(() => logger.error('Cloudreve 2FA authentication failed'));
+    }
+    
     accessToken = getToken.data.data.token.access_token;
     refreshToken = getToken.data.data.token.refresh_token;
 
