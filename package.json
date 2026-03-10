@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "zip": "node zip.js",
+    "zip:upload": "node upload.js",
     "dp": "node deploy.js",
     "dpr": "node deploy.js && node .",
     "s": "node ."
